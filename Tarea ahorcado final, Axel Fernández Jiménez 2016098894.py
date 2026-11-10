@@ -23,15 +23,18 @@ print('Ahorcado')
 print('Digite "ahorcado()"')
 
 
+def normalizar(texto):
+    return texto.lower().translate(str.maketrans("áéíóúü", "aeiouu"))
+
+
 def leerIntento():
     letra = input("Dígite una letra:")
     while not letra.isalpha() or len(letra) > 1:
         letra = input("Digite una letra válida:")    
-    return letra
+    return normalizar(letra)
 
 def haGanado(textoOriginal,texto):
-    return False
-    textoOriginal == texto
+    return textoOriginal == "".join(texto)
 
 def ahorcado ():
     abc = 'abcdefghijklmnñopqrstuvwxyz'
@@ -54,21 +57,8 @@ no arruine el juego.''')
     texto = ["_" for x in range(longitud)]
     print (texto)
     
-    if 'á' in textoOriginal:
-        textoOriginal = textoOriginal.replace('á','a')
-    if 'é' in textoOriginal:
-        textoOriginal = textoOriginal.replace('é','e')
-    if 'í' in textoOriginal:
-        textoOriginal = textoOriginal.replace('í','i')
-    if 'ó' in textoOriginal:
-        textoOriginal = textoOriginal.replace('ó','o')
-    if 'ú' in textoOriginal:
-        textoOriginal = textoOriginal.replace('ó','u')    
-    if 'ü' in textoOriginal:
-        textoOriginal = textoOriginal.replace('ü','u')
-    textoOriginal= textoOriginal.lower()
+    textoOriginal = normalizar(textoOriginal)
 
-        
     if continuar is False:
         print("El juego ha terminado")
     else:
@@ -81,7 +71,7 @@ no arruine el juego.''')
             ronda += 1   
             print (letrasIntentadas,',', cantidadIntentos,',', ronda)
             
-            if letra in letrasIntentadas:
+            while letra in letrasIntentadas:
                 print('Ya uso esa letra')
                 letra = leerIntento()
             letrasIntentadas = letrasIntentadas + letra
@@ -90,9 +80,10 @@ no arruine el juego.''')
                 if letra == textoOriginal[x]:
                     texto[x] = letra
                     m = "Muy bien sigue así"
-            else:
+            if letra not in textoOriginal:
                 cantidadIntentos += 1
-            print (texto,',','Letras intentadas:', letrasIntentadas,',','Intentos restantes:', cantidadIntentos,',','Ronda actual', ronda,',',m)
+            haganado = haGanado(textoOriginal, texto)
+            print (texto,',','Letras intentadas:', letrasIntentadas,',','Intentos restantes:', intentos - cantidadIntentos,',','Ronda actual', ronda,',',m)
 
 
             if intentos == cantidadIntentos:
@@ -100,17 +91,17 @@ no arruine el juego.''')
                 respuesta= input('¿Desea repetir el juego? si/no ')
                 
                 if respuesta == 'si':
-                    ahorcado()
+                    return ahorcado()
                 elif respuesta == 'no':
                     return 'Gracias por jugar'
 
                 
-            elif str(''.join(texto)) == str(textoOriginal):
+            elif haganado:
                 print ('Muy bien, lo has conseguido')
                 respuesta= input('¿Desea repetir el juego? si/no ')
                 
                 if respuesta == 'si':
-                    ahorcado()
+                    return ahorcado()
                 elif respuesta == 'no':
                     return 'Gracias por jugar'
 
